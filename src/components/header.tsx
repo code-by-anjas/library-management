@@ -1,11 +1,13 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
+import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
-export const Header = () => {
+export const Header = ({ session }: { session: Session }) => {
   const pathname = usePathname();
 
   return (
@@ -26,6 +28,20 @@ export const Header = () => {
             )}
           >
             Library
+          </Link>
+        </li>
+
+        <li>
+          <Link href='/my-profile' className='flex items-center gap-1.5'>
+            <Avatar className='size-8'>
+              <AvatarFallback className='bg-light-100 font-bold text-dark-500'>
+                {getInitials(session?.user?.name || "IN")}
+              </AvatarFallback>
+            </Avatar>
+
+            <p className='font-ibm-plex-sans text-base font-semibold text-white'>
+              {session.user?.name}
+            </p>
           </Link>
         </li>
       </ul>

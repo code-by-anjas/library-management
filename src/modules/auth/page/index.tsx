@@ -2,14 +2,19 @@
 
 import { ActionSignIn, ActionSignUp } from "../actions";
 import { AuthForm } from "../components";
-import { defaultValueSignIn, defaultValueSignUp, schemaSignUp } from "../libs";
+import {
+  defaultValueSignIn,
+  defaultValueSignUp,
+  schemaSignIn,
+  schemaSignUp,
+} from "../libs";
 
 export const ModulPageAuth = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
   if (type === "SIGN_IN") {
     return (
       <AuthForm
         type='SIGN_IN'
-        schema={schemaSignUp}
+        schema={schemaSignIn}
         defaultValues={defaultValueSignIn}
         onSubmit={ActionSignIn}
       />

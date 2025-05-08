@@ -21,3 +21,14 @@ interface IAuthCredentials {
   universityId: number;
   universityCard: string;
 }
+
+interface IAuthResult {
+  success: boolean;
+  message?: string;
+}
+
+interface IAuthResponse {
+  signature: string;
+  expire: number;
+  token: string;
+}

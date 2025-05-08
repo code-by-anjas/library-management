@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -10,7 +11,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        "ibm-plex-sans": ["var(--font-ibm-plex-sans"],
+        "ibm-plex-sans": ["var(--font-ibm-plex-sans)"],
         "bebas-neue": ["var(--font-bebas-neue)"],
       },
       colors: {
@@ -111,5 +112,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate],
 } satisfies Config;

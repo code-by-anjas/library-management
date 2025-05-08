@@ -12,7 +12,7 @@ const {
   },
 } = config;
 
-const authenticator = async () => {
+const authenticator = async (): Promise<IAuthResponse> => {
   try {
     const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
 
@@ -24,34 +24,35 @@ const authenticator = async () => {
     }
 
     const data = await response.json();
-
-    const { signature, expire, token } = data;
     return {
-      token,
-      expire,
-      signature,
+      token: data.token,
+      expire: data.expire,
+      signature: data.signature,
     };
-  } catch (error: any) {
-    throw new Error(`Authentication request faild: ${error.message}`);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Authentication request failed: ${error.message}`);
+    }
+    throw new Error(`Unknown error during authentication`);
   }
 };
 
-export const ImageUploader = ({
-  onFileChange,
-}: {
+interface ImageUploaderProps {
   onFileChange: (filePath: string) => void;
-}) => {
+}
+
+export const ImageUploader = ({ onFileChange }: ImageUploaderProps) => {
   const IKUploadRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<{ filePath: string | null }>({
     filePath: null,
   });
 
   const onError = (error: Error | { message: string; status?: number }) => {
-    console.log(error);
+    console.error("Upload error:", error);
 
     toast({
-      title: "Image uploaded failed",
-      description: `Your image could not be uploaded. Please try again`,
+      title: "Image upload failed",
+      description: "Your image could not be uploaded. Please try again.",
     });
   };
 
@@ -82,10 +83,7 @@ export const ImageUploader = ({
         className='upload-btn'
         onClick={(e) => {
           e.preventDefault();
-
-          if (IKUploadRef.current) {
-            IKUploadRef.current.click();
-          }
+          IKUploadRef.current?.click();
         }}
       >
         <Image
@@ -95,10 +93,8 @@ export const ImageUploader = ({
           height={20}
           className='object-contain'
         />
-
         <p className='text-base text-light-100'>Upload a File</p>
-
-        {file && <p className='upload-filename'>{file.filePath}</p>}
+        {file.filePath && <p className='upload-filename'>{file.filePath}</p>}
       </button>
 
       {file.filePath && (

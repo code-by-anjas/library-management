@@ -3,11 +3,20 @@
 import { signIn } from "@/auth";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
+import ratelimit from "@/lib/ratelimit";
 import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const ActionSignUp = async (params: IAuthCredentials) => {
   const { fullName, email, password, universityCard, universityId } = params;
+
+  // ini untuk membatasi user pada tiap ip melakukan request
+  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+  const { success } = await ratelimit.limit(ip);
+
+  if (!success) return redirect("/too-fast");
 
   const existingUser = await db
     .select()
@@ -39,7 +48,7 @@ export const ActionSignUp = async (params: IAuthCredentials) => {
       success: true,
     };
   } catch (error) {
-    console.log("SignUp is error");
+    console.log(`signUp error: ${error}`);
 
     return {
       success: false,
@@ -52,6 +61,11 @@ export const ActionSignIn = async (
   params: Pick<IAuthCredentials, "email" | "password">
 ) => {
   const { email, password } = params;
+
+  const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+  const { success } = await ratelimit.limit(ip);
+
+  if (!success) return redirect("/too-fast");
 
   try {
     const result = await signIn("credentials", {
@@ -69,7 +83,7 @@ export const ActionSignIn = async (
 
     return { success: true };
   } catch (error) {
-    console.log("sign in error");
+    console.log(`sign in error: ${error}`);
     return {
       success: false,
       message: "Error for sign in",
