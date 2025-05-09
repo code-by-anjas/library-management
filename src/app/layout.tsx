@@ -9,7 +9,6 @@ import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { SessionProvider } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 const IBMPlexSans = IBM_Plex_Sans({
@@ -34,11 +33,9 @@ export const metadata: Metadata = {
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
-  if (!session) redirect("/sign-in");
-
   // ini untuk mengupdate kapan terakhir kali user mengunjungi website kita
   after(async () => {
-    if (!session.user?.id) return;
+    if (!session?.user?.id) return;
 
     // get user and see the lastActivity is today
     const user = await db
