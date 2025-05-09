@@ -5,7 +5,12 @@ import { ReactNode } from "react";
 import "./globals.css";
 
 import { auth } from "@/auth";
+import { db } from "@/database/drizzle";
+import { users } from "@/database/schema";
+import { eq } from "drizzle-orm";
 import { SessionProvider } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { after } from "next/server";
 
 const IBMPlexSans = IBM_Plex_Sans({
   variable: "--font-ibm-plex-sans",
@@ -28,6 +33,32 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
+
+  if (!session) redirect("/sign-in");
+
+  // ini untuk mengupdate kapan terakhir kali user mengunjungi website kita
+  after(async () => {
+    if (!session.user?.id) return;
+
+    // get user and see the lastActivity is today
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, session.user.id))
+      .limit(1);
+
+    // kalo data di db lastactivitinya hari ini, jangan di update
+    if (user[0].lastActivityDate === new Date().toISOString().slice(0, 10))
+      return;
+
+    await db
+      .update(users)
+      .set({
+        lastActivityDate: new Date().toISOString().slice(0, 10),
+      })
+      .where(eq(users.id, session.user.id));
+  });
+
   return (
     <html lang='en'>
       <SessionProvider session={session}>

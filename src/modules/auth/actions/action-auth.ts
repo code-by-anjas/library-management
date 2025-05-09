@@ -3,7 +3,9 @@
 import { signIn } from "@/auth";
 import { db } from "@/database/drizzle";
 import { users } from "@/database/schema";
+import config from "@/lib/config";
 import ratelimit from "@/lib/ratelimit";
+import { workflowClient } from "@/lib/workflow";
 import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
@@ -43,6 +45,15 @@ export const ActionSignUp = async (params: IAuthCredentials) => {
     });
 
     // await signInWithCredentials({ email, password });
+
+    // trigger untuk ngirim email pertama
+    await workflowClient.trigger({
+      url: `${config.env.prodApiEndpoint}/api/workflow/onboarding`,
+      body: {
+        email,
+        fullName,
+      },
+    });
 
     return {
       success: true,
