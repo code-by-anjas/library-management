@@ -16,10 +16,7 @@ const imagekit = new ImageKit({
 });
 
 // Daftar domain yang diizinkan akses CORS
-const WHITE_LIST_DOMAIN = [
-  "https://www.code-by-anjas.space",
-  "http://localhost:3000",
-];
+const WHITE_LIST_DOMAIN = [config.env.prodApiEndpoint, config.env.apiEndpoint];
 
 // Fungsi util untuk cek origin valid
 const isAllowedOrigin = (origin: string | null) =>
