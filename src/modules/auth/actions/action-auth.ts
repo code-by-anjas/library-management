@@ -26,11 +26,8 @@ export const ActionSignUp = async (params: IAuthCredentials) => {
     .where(eq(users.email, email))
     .limit(1);
 
-  if (existingUser.length !== 0) {
-    return {
-      success: false,
-      message: "User already exist",
-    };
+  if (existingUser.length > 0) {
+    return { success: false, error: "User already exists" };
   }
 
   const hashedPassword = await hash(password, 10);
@@ -45,6 +42,9 @@ export const ActionSignUp = async (params: IAuthCredentials) => {
     });
 
     // await signInWithCredentials({ email, password });
+
+    console.log("QSTASH_URL:", process.env.QSTASH_URL);
+    console.log(`${config.env.prodApiEndpoint}/api/workflows/onboarding`);
 
     // trigger untuk ngirim email pertama
     await workflowClient.trigger({
