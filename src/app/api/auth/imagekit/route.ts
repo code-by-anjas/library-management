@@ -20,7 +20,8 @@ export const GET = async () => {
   return new NextResponse(JSON.stringify(authParams), {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin":
+        "https://library-management-5fms9er9b-anjas-projects-9712007e.vercel.app", // hindari *, buat whitelist kalo mau
       "Access-Control-Allow-Methods": "GET, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
       "Content-Type": "application/json",
