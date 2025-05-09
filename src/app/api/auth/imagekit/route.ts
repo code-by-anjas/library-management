@@ -15,5 +15,15 @@ const imagekit = new ImageKit({
 });
 
 export const GET = async () => {
-  return NextResponse.json(imagekit.getAuthenticationParameters());
+  const authParams = imagekit.getAuthenticationParameters();
+
+  return new NextResponse(JSON.stringify(authParams), {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Content-Type": "application/json",
+    },
+  });
 };
