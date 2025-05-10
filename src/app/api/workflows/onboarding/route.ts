@@ -13,6 +13,7 @@ type InitialData = {
 
 const ONE_DAY_IN_MS = 60 * 60 * 24 * 1000;
 const THREE_DAY_IN_MS = 3 * ONE_DAY_IN_MS;
+const ONE_WEEK_IN_MS = 7 * ONE_DAY_IN_MS;
 const THIRTY_DAY_IN_MS = 30 * ONE_DAY_IN_MS;
 
 // dapetin kapan user activenya
@@ -73,6 +74,6 @@ export const { POST } = serve<InitialData>(async (context) => {
       });
     }
 
-    await context.sleep("wait-for-1-month", THIRTY_DAY_IN_MS);
+    await context.sleep("wait-for-1-week", ONE_WEEK_IN_MS);
   }
 });
