@@ -20,28 +20,13 @@ export const sendEmail = async ({
   subject: string;
   message: string;
 }) => {
-  const payload = {
-    api: {
-      name: "email",
-      provider: resend({ token: config.env.resendToken }),
-    },
-    body: {
-      from: "Acme <onboarding@resend.dev>",
-      to: [email],
-      subject,
-      html: message,
-    },
-  };
-
-  console.log(JSON.stringify(payload, null, 2));
-
   await qstashclient.publishJSON({
     api: {
       name: "email",
       provider: resend({ token: config.env.resendToken }),
     },
     body: {
-      from: "Acme <onboarding@resend.dev>",
+      from: "code.by.anjas@gmail.com",
       to: [email],
       subject,
       html: message,
