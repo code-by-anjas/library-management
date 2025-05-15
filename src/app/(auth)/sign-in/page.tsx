@@ -1,7 +1,7 @@
-import { ModulPageAuth } from "@/modules/auth/page";
+import { ModulePageAuth } from "@/modules/auth/page";
 
 const SignIn = () => {
-  return <ModulPageAuth type='SIGN_IN' />;
+  return <ModulePageAuth type='SIGN_IN' />;
 };
 
 export default SignIn;

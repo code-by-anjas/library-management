@@ -1,13 +1,23 @@
-import { SAMPLE_BOOKS } from "@/constants";
+import { auth } from "@/auth";
+import { db } from "@/database/drizzle";
+import { books } from "@/database/schema";
 import { BookList, BookOverview } from "../components";
 
-export const ModulPageHomepage = async () => {
+export const ModulePageHomepage = async () => {
+  const session = await auth();
+
+  const latestBooks: IBookDetail[] = await db
+    .select()
+    .from(books)
+    .limit(10)
+    .orderBy(books.createdAt);
+
   return (
     <>
-      <BookOverview {...SAMPLE_BOOKS[0]} /> {/* hero section */}
+      <BookOverview {...latestBooks[0]} userId={session?.user?.id as string} />
       <BookList
         title='Popular Books'
-        books={SAMPLE_BOOKS}
+        books={latestBooks.slice(1)}
         containerClassName='mt-28'
       />
     </>

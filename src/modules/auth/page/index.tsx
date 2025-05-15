@@ -7,9 +7,9 @@ import {
   defaultValueSignUp,
   schemaSignIn,
   schemaSignUp,
-} from "../libs";
+} from "../schema";
 
-export const ModulPageAuth = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
+export const ModulePageAuth = ({ type }: { type: "SIGN_IN" | "SIGN_UP" }) => {
   if (type === "SIGN_IN") {
     return (
       <AuthForm

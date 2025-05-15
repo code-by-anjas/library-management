@@ -1,5 +1,5 @@
-import { ModulPageHomepage } from "@/modules/homepage/page";
+import { ModulePageHomepage } from "@/modules/homepage/page";
 
-const Homepage = () => <ModulPageHomepage />;
+const Homepage = () => <ModulePageHomepage />;
 
 export default Homepage;

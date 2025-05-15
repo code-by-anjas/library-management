@@ -43,9 +43,6 @@ export const ActionSignUp = async (params: IAuthCredentials) => {
 
     // await signInWithCredentials({ email, password });
 
-    console.log("QSTASH_URL:", process.env.QSTASH_URL);
-    console.log(`${config.env.prodApiEndpoint}/api/workflows/onboarding`);
-
     // trigger untuk ngirim email pertama
     await workflowClient.trigger({
       url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,

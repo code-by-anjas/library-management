@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageUploader } from "@/components";
+import { FileUploader } from "@/components";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -97,7 +97,14 @@ export const AuthForm = <T extends FieldValues>({
                   </FormLabel>
                   <FormControl>
                     {field.name === "universityCard" ? (
-                      <ImageUploader onFileChange={field.onChange} />
+                      <FileUploader
+                        type='IMAGE'
+                        accept='image/*'
+                        placeholder='Upload your ID'
+                        folder='ids'
+                        variant='dark'
+                        onFileChange={field.onChange}
+                      />
                     ) : (
                       <Input
                         required

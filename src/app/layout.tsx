@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Bebas_Neue, IBM_Plex_Sans } from "next/font/google";
 import { ReactNode } from "react";
-import "./globals.css";
+import "./styles/globals.css";
 
 import { auth } from "@/auth";
 import { db } from "@/database/drizzle";

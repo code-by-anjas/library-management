@@ -1,7 +1,7 @@
-import { ModulPageMyProfile } from "@/modules/my-rofile/page";
+import { ModulePageMyProfile } from "@/modules/my-rofile/page";
 
 const MyProfile = () => {
-  return <ModulPageMyProfile />;
+  return <ModulePageMyProfile />;
 };
 
 export default MyProfile;

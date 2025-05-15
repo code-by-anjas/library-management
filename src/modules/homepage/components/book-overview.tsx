@@ -1,8 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { db } from "@/database/drizzle";
+import { users } from "@/database/schema";
+import { eq } from "drizzle-orm";
 import Image from "next/image";
+import { BorrowButton } from "./book-borrow-btn";
 import { BookCover } from "./book-cover";
 
-export const BookOverview = ({
+interface Props extends IBookDetail {
+  userId: string;
+}
+
+export const BookOverview = async ({
   author,
   availableCopies,
   coverColor,
@@ -12,7 +19,24 @@ export const BookOverview = ({
   rating,
   title,
   totalCopies,
-}: IBookDetail) => {
+  id,
+  userId,
+}: Props) => {
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  if (!user) return null;
+
+  const borrowEligibelity = {
+    isEligible: availableCopies > 0 && user.status === "APPROVED",
+    message:
+      availableCopies < 0
+        ? "Book is not available"
+        : "You are not aligible to borrow this book",
+  };
   return (
     <section className='book-overview'>
       <div className='flex flex-1 flex-col gap-5'>
@@ -44,10 +68,11 @@ export const BookOverview = ({
 
         <p className='book-description'>{description}</p>
 
-        <Button className='book-overview_btn'>
-          <Image src='/icons/book.svg' alt='book' width={20} height={20} />
-          <p className='font-bebas-neue text-xl text-dark-100'>Borrow</p>
-        </Button>
+        <BorrowButton
+          bookId={id}
+          userId={userId}
+          borrowEligibelity={borrowEligibelity}
+        />
       </div>
 
       <div className='relative flex flex-1 justify-center'>
